@@ -29,6 +29,7 @@ import Html exposing (Attribute, Html)
 import Html.Attributes
 import Html.Events
 import Html.Keyed
+import Json.Decode
 import Keyboard
 
 
@@ -348,6 +349,9 @@ viewItem { toKeyedItemId, li } { key, mouse } item =
             List.append customAttributes
                 [ Html.Events.onMouseEnter (MouseEnter item)
                 , Html.Events.onMouseLeave (MouseLeave item)
+
+                -- NoOp mousedown so it does not trigger a blur event on the input
+                , Html.Events.onWithOptions "mousedown" { stopPropagation = False, preventDefault = True } (Json.Decode.succeed NoOp)
                 , Html.Events.onClick (MouseClick item)
                 ]
 
